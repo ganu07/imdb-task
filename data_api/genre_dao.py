@@ -21,6 +21,18 @@ class GenreDao(object):
 
 
     @staticmethod
+    def add_genre(session, name):
+        """
+        :param session: DB session to passed from caller
+        :param name: Genre name to be added in DB
+        :return: Genre object returned from python class
+        """
+        genre = Genres(name)
+        session.add(genre)
+        return genre
+
+
+    @staticmethod
     def attach_movie_to_genre_db(session, movie_id, genre_id):
         """
         :param session: DB session to passed from caller

@@ -19,5 +19,15 @@ class CastDao(object):
         """
         return session.query(Cast).filter(Cast.name == name).first()
 
-    
+    @staticmethod
+    def add_cast(session, name):
+        """
+        :param session: DB session to passed from caller
+        :param name: Cast name to be added in db
+        :return: Cast object of python class
+        """
+        cast_obj = Cast(name)
+        session.add(cast_obj)
+        return cast_obj
+
 

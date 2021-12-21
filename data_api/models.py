@@ -35,6 +35,18 @@ class Movies(Base):
                "Genre Blob={}".format(self.id, self.popularity, self.director_id,
                                       self.imdb_score, self.name, self.genre_blob)
 
+class Cast(Base):
+    __tablename__ = 'cast'
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    name = Column(CHAR(50))
+
+    __table_args__ = (
+        Index('cast_id_index', 'id'),
+        Index('cast_name_index', 'name')
+    )
+
+
+
 class Genres(Base):
     __tablename__ = 'genres'
 

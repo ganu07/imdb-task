@@ -52,6 +52,17 @@ class MoviesDao(object):
         session.commit()
 
 
+    @staticmethod
+    def edit_movie(session, movie_id, popularity, director, genre_list, imdb_score, name):
+        movie = session.query(Movies).filter(Movies.id == movie_id).first()
+
+        if name and name != movie.name:
+            movie.name = name
+
+        if popularity and popularity != movie.popularity:
+            movie.popularity = popularity
+
+
 
     @staticmethod
     def get_movie(session, name, director, genre, limit, offset):
