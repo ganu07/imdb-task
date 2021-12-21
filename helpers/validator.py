@@ -29,3 +29,13 @@ class Validator(object):
         name = movie_json.get('name', '').strip()
 
         
+
+     @staticmethod
+    def validate_param(popularity, imdb_score):
+        if popularity > 100 or popularity < 0:
+            # raise validation error
+            raise InputOutOfBounds
+
+        if imdb_score > 10 or imdb_score < 0:
+            # raise validation error
+            raise InputOutOfBounds

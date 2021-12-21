@@ -11,4 +11,8 @@ def enforce_auth(username, password):
 
 def basic_auth(func):
 
-    pass
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        auth = request.authorization
+
+    return inner

@@ -10,6 +10,7 @@ def get_engine():
     return create_engine(Config.SQLITE_PREFIX + Config.SQLITEDB, echo=True)
 
 
+
 @contextmanager
 def terminating_sn():
     # A context manager which closes session and db connections after use
@@ -19,6 +20,10 @@ def terminating_sn():
     finally:
         sn.close()
         sn.bind.dispose()
+
+def load_db():
+    engine = get_engine()
+    Base.metadata.create_all(engine)
 
 
 def enable_foreign_keys(sn):

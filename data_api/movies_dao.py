@@ -23,19 +23,6 @@ class MoviesDao(object):
     def get_genre_list(genre_blob):
         return genre_blob.split(MoviesDao.GENRE_MARKER)
 
-    @staticmethod
-    def movie_id_exists(session, movie_id):
-        return bool(session.query(Movies.id).filter(Movies.id == movie_id).first())
-
-    @staticmethod
-    def movie_exists(session, name):
-        return bool(session.query(Movies.id).filter(Movies.name == name).first())
-
-    @staticmethod
-    def add_movie_to_db(session, popularity, director_id, imdb_score, name, genre_blob):
-        movie = Movies(popularity, director_id, imdb_score, name, genre_blob)
-        session.add(movie)
-        return movie
 
     @staticmethod
     def add_movie(session, popularity, director, genre_list, imdb_score, name):
@@ -59,9 +46,6 @@ class MoviesDao(object):
         if name and name != movie.name:
             movie.name = name
 
-        if popularity and popularity != movie.popularity:
-            movie.popularity = popularity
-
 
 
     @staticmethod
@@ -74,9 +58,6 @@ class MoviesDao(object):
         if name:
             query = query.filter(Movies.name.ilike("%{}%".format(name)))
 
-        if director:
-            query = query.filter(Cast.name.ilike("%{}%".format(director)))
-
-        
+               
 
         return total, resp

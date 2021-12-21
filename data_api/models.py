@@ -53,18 +53,7 @@ class Genres(Base):
     id = Column(INTEGER, primary_key=True, autoincrement=True)
     name = Column(CHAR(20), unique=True)
 
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return "Genre Table Id={}, Name={}".format(self.id, self.name)
-
-    __table_args__ = (
-        Index('genres_id_index', 'id'),
-        Index('genres_name_index', 'name')
-    )
-
-
+    
 class MovieGenre(Base):
     __tablename__ = 'movie_genre'
 
@@ -78,10 +67,4 @@ class MovieGenre(Base):
         Index('movie_genre_id_index', 'id')
     )
 
-    def __init__(self, movie_id, genre_id):
-        self.movie_id = movie_id
-        self.genre_id = genre_id
-
-    def __repr__(self):
-        return "Movie Genre Table Id={} Movie ID={}, Genre ID={}".format(
-            self.id, self.movie_id, self.genre_id)
+   

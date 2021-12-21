@@ -14,5 +14,9 @@ class Config(object):
             'stream': 'ext://flask.logging.wsgi_errors_stream',
             'formatter': 'default'
 	}}
+	'root': {
+            'level': 'INFO',
+            'handlers': ['wsgi']
+        }
     }
     EDIT_USER_MAP = {"admin": "admin"}
