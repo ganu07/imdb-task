@@ -155,8 +155,7 @@ with terminating_sn() as session:
 
             MoviesDao.edit_movie(session, movie_id, popularity, director, genre_list, imdb_score,
                                  name)
-            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
-                ResponseMaker.RESPONSE_200_MESSAGE)
+            
 
 
 @blueprint.route('/v1/movies', methods=['PUT'])
@@ -171,4 +170,13 @@ def edit_movies():
                              ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS).return_response()
 @basic_auth
 def delete_movies():
-    pass
+    if not movie_id:
+        return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
+                             ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
+
+    try:
+        with terminating_sn() as session:
+            MoviesDao.delete_movie_from_db(session, movie_id)
+
+            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
+                ResponseMaker.RESPONSE_200_MESSAGE)

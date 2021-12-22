@@ -16,16 +16,10 @@ class Parser(object):
         data = json.load(file)
         return data
 
-
-    if not MoviesDao.movie_exists(session, name):
-        LOG.info("Movie {} doesn't exists writting".format(name))
-        MoviesDao.add_movie(
-            session, popularity, director, genre_list, imdb_score, name)
-        session.commit()
-    else:
-        LOG.info("Movie {} exists hence skipping write".format(name))
-
-
+    def populate(self):
+        LOG.info("Populating tables")
+        loaded_json = self.load_file()
+        LOG.info("Json loaded from file {}".format(self.file_location))
 
         for movie in loaded_json:
             popularity, director, genre_list, imdb_score, name = Validator.parse_json(movie)
@@ -40,8 +34,5 @@ class Parser(object):
                     else:
                         LOG.info("Movie {} exists hence skipping write".format(name))
             except Exception:
-                LOG.exception("Exception occured while writting movie {} to db".format(name))
-                session.rollback()
-	except Exception:
                 LOG.exception("Exception occured while writting movie {} to db".format(name))
                 session.rollback()

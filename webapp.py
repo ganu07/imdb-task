@@ -8,7 +8,7 @@ def create_app():
 
     # Instantiate flask app
     app = Flask(__name__)
-	app.run()
+	app.run(debug=True)
 
     # Return app
     return app

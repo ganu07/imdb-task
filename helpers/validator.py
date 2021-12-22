@@ -38,15 +38,6 @@ if imdb_score > 10 or imdb_score < 0:
             raise InputOutOfBounds
 
 
-	@staticmethod
-    def parse_json(movie_json):
-        popularity = float(movie_json.get('99popularity', 0))
-        director = movie_json.get('director', '').strip()
-        genre_list = movie_json.get('genre', [])
-        imdb_score = float(movie_json.get('imdb_score', 0))
-        name = movie_json.get('name', '').strip()
-
-
 for index, value in enumerate(genre_list):
             # Removing unnecessary spaces
             genre_list[index] = value.strip()

@@ -96,5 +96,14 @@ ef test_002_movies_delete_api(self):
             self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS,
                              json.loads(response.get_data(as_text=True)).get('err_code'))
 
+ response = client.delete(self.API_URI, query_string={'id': content.get('id')},
+                                     headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_200, response.status_code)
+
+            # Getting after deleted entry
+            response = client.get(self.API_URI, query_string={'name': data['name']})
+            content = json.loads(response.get_data(as_text=True)).get('data')
+            self.assertFalse(content)
+
 
 
