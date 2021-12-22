@@ -17,6 +17,15 @@ class Parser(object):
         return data
 
 
+    if not MoviesDao.movie_exists(session, name):
+        LOG.info("Movie {} doesn't exists writting".format(name))
+        MoviesDao.add_movie(
+            session, popularity, director, genre_list, imdb_score, name)
+        session.commit()
+    else:
+        LOG.info("Movie {} exists hence skipping write".format(name))
+
+
 
         for movie in loaded_json:
             popularity, director, genre_list, imdb_score, name = Validator.parse_json(movie)

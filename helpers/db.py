@@ -21,6 +21,12 @@ def terminating_sn():
         sn.close()
         sn.bind.dispose()
 
+
+def enable_foreign_keys(sn):
+    sn.execute('PRAGMA foreign_keys = ON')
+
+
+
 def session():
     # Return sqlalchemy session to database
     return Session(bind=get_engine(), expire_on_commit=False)

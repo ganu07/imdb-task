@@ -146,6 +146,17 @@ try:
             raise MissingFields
 
         
+with terminating_sn() as session:
+            if not MoviesDao.movie_id_exists(session, movie_id):
+                return ResponseMaker(ResponseMaker.RESPONSE_400,
+                                     ResponseMaker.RESPONSE_400_MESSAGE,
+                                     ResponseMaker.RESPONSE_400_ERROR_ENTRY_MISSING
+                                     ).return_response()
+
+            MoviesDao.edit_movie(session, movie_id, popularity, director, genre_list, imdb_score,
+                                 name)
+            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
+                ResponseMaker.RESPONSE_200_MESSAGE)
 
 
 @blueprint.route('/v1/movies', methods=['PUT'])

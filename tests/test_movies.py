@@ -75,3 +75,11 @@ class TestMovies(unittest.TestCase):
             self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS,
                              json.loads(response.get_data(as_text=True)).get('err_code'))
 
+ef test_002_movies_delete_api(self):
+        data = TestMovies.test_data.copy()
+
+        with app.test_client() as client:
+            # Adding entry
+            client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+
+

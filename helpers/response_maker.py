@@ -21,6 +21,11 @@ class ResponseMaker(object):
         self.message = message
         self.error_code = error_code
 
-    def return_response(self, content=None):
+  def return_response(self, content=None):
         resp = {'message': self.message, 'err_code': self.error_code if self.error_code else ''}
+        if content:
+            resp = content
+        resp = Response(json.dumps(resp), self.status_code)
+        resp.headers['Content-Type'] = 'application/json'
+        return resp
 
