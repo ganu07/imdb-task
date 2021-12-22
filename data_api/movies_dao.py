@@ -49,3 +49,13 @@ class MoviesDao(object):
            
 
         return total, resp
+
+ if director:
+            director_obj = CastDao.check_or_add_cast(session, director)
+            movie.director_id = director_obj.id
+
+        if genre_list:
+            movie.genre_blob = MoviesDao.get_genre_blob(genre_list)
+            GenreDao.clear_movie_genre_map(session, movie_id)
+            for genre in genre_list:
+                GenreDao.attach_movie_to_genre(session, movie_id, genre)

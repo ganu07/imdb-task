@@ -130,6 +130,21 @@ def add_movies():
             ResponseMaker.RESPONSE_500_MESSAGE)
 
         # Add a validation for popularity and imdb_score
+
+try:
+        data = json.loads(request.data)
+
+        if not data:
+            raise MissingFields
+
+        popularity, director, genre_list, imdb_score, name = Validator.parse_json(data)
+
+        # Add a validation for popularity and imdb_score
+        Validator.validate_param(popularity, imdb_score)
+
+        if not movie_id or not any([popularity, director, genre_list, imdb_score, name]):
+            raise MissingFields
+
         
 
 

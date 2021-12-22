@@ -25,6 +25,16 @@ def session():
     # Return sqlalchemy session to database
     return Session(bind=get_engine(), expire_on_commit=False)
 
+@contextmanager
+def terminating_sn():
+    # A context manager which closes session and db connections after use
+    sn = session()
+    try:
+        yield sn
+    finally:
+        sn.close()
+        sn.bind.dispose()
+
 
 def load_db():
     engine = get_engine()

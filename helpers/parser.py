@@ -17,12 +17,11 @@ class Parser(object):
         return data
 
 
-	def populate(self):
-		LOG.info("Populating tables")
-		loaded_json = self.load_file()
-		LOG.info("Json loaded from file {}".format(self.file_location))
 
-        try:
+        for movie in loaded_json:
+            popularity, director, genre_list, imdb_score, name = Validator.parse_json(movie)
+            LOG.info("Movie {} selected for write".format(name))
+            try:
                 with terminating_sn() as session:
                     if not MoviesDao.movie_exists(session, name):
                         LOG.info("Movie {} doesn't exists writting".format(name))

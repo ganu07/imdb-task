@@ -14,10 +14,6 @@ class ResponseMaker(object):
     RESPONSE_400_MESSAGE = 'BAD REQUEST'
     RESPONSE_500_MESSAGE = 'INTERNAL SERVER ERROR'
 
-    RESPONSE_200_MESSAGE = 'SUCCESS'
-    RESPONSE_401_MESSAGE = 'UNAUTHORIZED'
-    RESPONSE_400_MESSAGE = 'BAD REQUEST'
-    RESPONSE_500_MESSAGE = 'INTERNAL SERVER ERROR'
 
 
     def __init__(self, status_code, message=None, error_code=None):

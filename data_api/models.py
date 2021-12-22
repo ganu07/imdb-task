@@ -62,3 +62,8 @@ class MovieGenre(Base):
         return "Movie Genre Table Id={} Movie ID={}, Genre ID={}".format(
             self.id, self.movie_id, self.genre_id)
    
+class Genres(Base):
+    __tablename__ = 'genres'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    name = Column(CHAR(20), unique=True)

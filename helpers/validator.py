@@ -19,7 +19,9 @@ class Validator(object):
 
         return limit, offset
 
-
+if imdb_score > 10 or imdb_score < 0:
+            # raise validation error
+            raise InputOutOfBounds
         
 
      @staticmethod
