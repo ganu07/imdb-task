@@ -89,27 +89,7 @@ def get_movies():
 @blueprint.route('/v1/movies', methods=['POST'])
 @basic_auth
 def add_movies():
-    """
-    An API for adding new movies accepts json input. ALL Fields Mandatory
-    Request Body:
-    {
-    "99popularity": 83.0,
-    "director": "Victor Fleming",
-    "genre": [
-      "Adventure",
-      " Family",
-      " Fantasy",
-      " Musical"
-    ],
-    "imdb_score": 8.3,
-    "name": "The Wizard of Oz"
-    }
-    Response:
-    :return: 200, SUCCESS for a successful entry
-    :return: 400, BAD REQUEST for issue in client request side
-    :return: 401, UNAUTHORIZED for wrong user access
-    :return: 500, INTERNAL SERVER ERROR for issue on server side
-    """
+    
     try:
         data = json.loads(request.data)
 
