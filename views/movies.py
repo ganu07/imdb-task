@@ -83,13 +83,50 @@ def get_movies():
 
     limit, offset = Validator.get_limit_offset(limit, offset)
 
-   
+    try:
+        with terminating_sn() as session:
+            total, resp = MoviesDao.get_movie(session, name, director, genre, limit, offset)
+
+            movie_list = []
+            for movie in resp:
+                movie_id, popularity, director, genre_blob, imdb_score, name = movie
+                movie_list.append({'id': movie_id, '99popularity': popularity, 'director': director,
+                                   'genre': MoviesDao.get_genre_list(genre_blob),
+                                   'imdb_score': imdb_score, 'name': name})
+
+            resp = {'total': total, 'data': movie_list}
+            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(resp)
+    except Exception:
+        session.rollback()
+        LOG.exception("Exception occurred while writting movie {} to db".format(name))
+        return ResponseMaker(ResponseMaker.RESPONSE_500).return_response(
+            ResponseMaker.RESPONSE_500_MESSAGE)
 
 
 @blueprint.route('/v1/movies', methods=['POST'])
 @basic_auth
 def add_movies():
-    
+    """
+    An API for adding new movies accepts json input. ALL Fields Mandatory
+    Request Body:
+    {
+    "99popularity": 83.0,
+    "director": "Victor Fleming",
+    "genre": [
+      "Adventure",
+      " Family",
+      " Fantasy",
+      " Musical"
+    ],
+    "imdb_score": 8.3,
+    "name": "The Wizard of Oz"
+    }
+    Response:
+    :return: 200, SUCCESS for a successful entry
+    :return: 400, BAD REQUEST for issue in client request side
+    :return: 401, UNAUTHORIZED for wrong user access
+    :return: 500, INTERNAL SERVER ERROR for issue on server side
+    """
     try:
         data = json.loads(request.data)
 
@@ -97,7 +134,25 @@ def add_movies():
             raise MissingFields
 
         popularity, director, genre_list, imdb_score, name = Validator.parse_json(data)
-        except (json.decoder.JSONDecodeError, MissingFields):
+
+        # Add a validation for popularity and imdb_score
+        Validator.validate_param(popularity, imdb_score)
+
+        if not all([popularity, director, genre_list, imdb_score, name]):
+            raise MissingFields
+
+        with terminating_sn() as session:
+            if MoviesDao.movie_exists(session, name):
+                return ResponseMaker(ResponseMaker.RESPONSE_400,
+                                     ResponseMaker.RESPONSE_400_MESSAGE,
+                                     ResponseMaker.RESPONSE_400_ERROR_ENTRY_PRESENT
+                                     ).return_response()
+
+            MoviesDao.add_movie(session, popularity, director, genre_list, imdb_score, name)
+            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
+                ResponseMaker.RESPONSE_200_MESSAGE)
+
+    except (json.decoder.JSONDecodeError, MissingFields):
         return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
                              ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
     except InputOutOfBounds:
@@ -109,9 +164,39 @@ def add_movies():
         return ResponseMaker(ResponseMaker.RESPONSE_500).return_response(
             ResponseMaker.RESPONSE_500_MESSAGE)
 
-        # Add a validation for popularity and imdb_score
 
-try:
+@blueprint.route('/v1/movies', methods=['PUT'])
+@basic_auth
+def edit_movies():
+    """
+    An API to edit existing movie details. Accepts id in param and all the edit fields in body.
+    Request:
+    v1/movies?id=1
+    :param id: Required
+
+    Request Body: - Any one of the field given below is required
+    {
+    "99popularity": 83.0,
+    "director": "Victor Fleming",
+    "genre": [
+      "Adventure",
+      " Family",
+      " Fantasy",
+      " Musical"
+    ],
+    "imdb_score": 8.3,
+    "name": "The Wizard of Oz"
+    }
+
+    Response:
+    :return: 200, SUCCESS for a successful edition
+    :return: 400, BAD REQUEST for issue in client request side
+    :return: 401, UNAUTHORIZED for wrong user access
+    :return: 500, INTERNAL SERVER ERROR for issue on server side
+    """
+    movie_id = int(request.args.get('id', 0))
+
+    try:
         data = json.loads(request.data)
 
         if not data:
@@ -125,8 +210,7 @@ try:
         if not movie_id or not any([popularity, director, genre_list, imdb_score, name]):
             raise MissingFields
 
-        
-with terminating_sn() as session:
+        with terminating_sn() as session:
             if not MoviesDao.movie_id_exists(session, movie_id):
                 return ResponseMaker(ResponseMaker.RESPONSE_400,
                                      ResponseMaker.RESPONSE_400_MESSAGE,
@@ -135,21 +219,37 @@ with terminating_sn() as session:
 
             MoviesDao.edit_movie(session, movie_id, popularity, director, genre_list, imdb_score,
                                  name)
-            
+            return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
+                ResponseMaker.RESPONSE_200_MESSAGE)
 
-
-@blueprint.route('/v1/movies', methods=['PUT'])
-@basic_auth
-def edit_movies():
-    
     except (json.decoder.JSONDecodeError, MissingFields):
         return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
                              ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
     except InputOutOfBounds:
         return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
                              ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS).return_response()
+    except Exception:
+        session.rollback()
+        LOG.exception("Exception occurred while editing a movie if {} info".format(movie_id))
+
+
+@blueprint.route('/v1/movies', methods=['DELETE'])
 @basic_auth
 def delete_movies():
+    """
+    An API to delete movies stored in db based on the id passed in param
+    Request:
+    v1/movies?id=1
+    :param id: Required
+
+    Response:
+    :return: 200, SUCCESS for a successful deletion
+    :return: 400, BAD REQUEST for issue in client request side
+    :return: 401, UNAUTHORIZED for wrong user access
+    :return: 500, INTERNAL SERVER ERROR for issue on server side
+    """
+    movie_id = int(request.args.get('id', 0))
+
     if not movie_id:
         return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
                              ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
@@ -161,8 +261,8 @@ def delete_movies():
             return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
                 ResponseMaker.RESPONSE_200_MESSAGE)
 
-except Exception:
+    except Exception:
         session.rollback()
         LOG.exception("Exception occurred while deleting movie id {} from db".format(movie_id))
         return ResponseMaker(ResponseMaker.RESPONSE_500).return_response(
-            ResponseMaker.RESPONSE_500_MESSAGE)
+             ResponseMaker.RESPONSE_500_MESSAGE)
