@@ -16,11 +16,6 @@ class ResponseMaker(object):
 
 
 
-    def __init__(self, status_code, message=None, error_code=None):
-        self.status_code = status_code
-        self.message = message
-        self.error_code = error_code
-
   def return_response(self, content=None):
         resp = {'message': self.message, 'err_code': self.error_code if self.error_code else ''}
         if content:

@@ -81,5 +81,20 @@ ef test_002_movies_delete_api(self):
         with app.test_client() as client:
             # Adding entry
             client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+	# Getting added entry
+            response = client.get(self.API_URI, query_string={'name': data['name']})
+            content = json.loads(response.get_data(as_text=True)).get('data')[0]
+            self.assertTrue(content)
+
+            # Checking 401
+            response = client.delete(self.API_URI, query_string={'id': content.get('id')})
+            self.assertEqual(ResponseMaker.RESPONSE_401, response.status_code)
+
+            # Checking 400
+            response = client.delete(self.API_URI, headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_400, response.status_code)
+            self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS,
+                             json.loads(response.get_data(as_text=True)).get('err_code'))
+
 
 

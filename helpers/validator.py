@@ -47,3 +47,9 @@ if imdb_score > 10 or imdb_score < 0:
         name = movie_json.get('name', '').strip()
 
 
+for index, value in enumerate(genre_list):
+            # Removing unnecessary spaces
+            genre_list[index] = value.strip()
+
+        return popularity, director, genre_list, imdb_score, name
+

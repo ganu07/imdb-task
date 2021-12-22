@@ -162,7 +162,13 @@ with terminating_sn() as session:
 @blueprint.route('/v1/movies', methods=['PUT'])
 @basic_auth
 def edit_movies():
-    pass
+    
+    except (json.decoder.JSONDecodeError, MissingFields):
+        return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
+                             ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
+    except InputOutOfBounds:
+        return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
+                             ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS).return_response()
 @basic_auth
 def delete_movies():
     pass

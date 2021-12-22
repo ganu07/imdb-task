@@ -42,3 +42,6 @@ class Parser(object):
             except Exception:
                 LOG.exception("Exception occured while writting movie {} to db".format(name))
                 session.rollback()
+	except Exception:
+                LOG.exception("Exception occured while writting movie {} to db".format(name))
+                session.rollback()
