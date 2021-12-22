@@ -26,5 +26,9 @@ class CastDao(object):
 
     @staticmethod
     def check_or_add_cast(session, cast_name):
-        
+        cast_obj = CastDao.get_cast(session, cast_name)
+
+        if not cast_obj:
+            cast_obj = CastDao.add_cast(session, cast_name)
+            session.flush()
         cast_obj = CastDao.get_cast(session, cast_name)

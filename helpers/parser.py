@@ -20,3 +20,8 @@ class Parser(object):
         file = open(self.file_location)
         data = json.load(file)
         return data
+
+	def populate(self):
+		LOG.info("Populating tables")
+		loaded_json = self.load_file()
+		LOG.info("Json loaded from file {}".format(self.file_location))

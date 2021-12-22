@@ -9,12 +9,12 @@ class Config(object):
         'formatters': {'default': {
             'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
         }},
-       'handlers': {'wsgi': {
+        'handlers': {'wsgi': {
             'class': 'logging.StreamHandler',
             'stream': 'ext://flask.logging.wsgi_errors_stream',
             'formatter': 'default'
-	}}
-	'root': {
+        }},
+        'root': {
             'level': 'INFO',
             'handlers': ['wsgi']
         }

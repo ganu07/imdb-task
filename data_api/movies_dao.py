@@ -33,10 +33,6 @@ class MoviesDao(object):
             session, popularity, director_obj.id, imdb_score, name, genre_blob)
         session.flush()
 
-        for genre in genre_list:
-            GenreDao.attach_movie_to_genre(session, movie_obj.id, genre)
-
-        session.commit()
 
 
     @staticmethod
@@ -45,7 +41,8 @@ class MoviesDao(object):
 
         if name and name != movie.name:
             movie.name = name
-
+	if popularity and popularity != movie.popularity:
+            movie.popularity = popularity
 
 
     @staticmethod
@@ -53,11 +50,6 @@ class MoviesDao(object):
         query = session.query(
             Movies.id, Movies.popularity, Cast.name, Movies.genre_blob, Movies.imdb_score, Movies.name)\
             .join(Cast, Movies.director_id == Cast.id)
-
-
-        if name:
-            query = query.filter(Movies.name.ilike("%{}%".format(name)))
-
-               
+           
 
         return total, resp

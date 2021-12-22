@@ -17,11 +17,7 @@ class Movies(Base):
     name = Column(CHAR(100), unique=True)
     genre_blob = Column(TEXT)
 
-    __table_args__ = (
-        ForeignKeyConstraint(['director_id'], ['cast.id'], name='director_id_fx_key'),
-        Index('id_index', 'id'),
-        Index('name_index', 'name')
-    )
+    
 
     def __init__(self, popularity, director_id, imdb_score, name, genre_blob):
         self.popularity = popularity
@@ -37,8 +33,7 @@ class Movies(Base):
 
 class Cast(Base):
     __tablename__ = 'cast'
-    id = Column(INTEGER, primary_key=True, autoincrement=True)
-    name = Column(CHAR(50))
+    
 
     __table_args__ = (
         Index('cast_id_index', 'id'),
@@ -67,4 +62,7 @@ class MovieGenre(Base):
         Index('movie_genre_id_index', 'id')
     )
 
+	def __init__(self, movie_id, genre_id):
+        self.movie_id = movie_id
+        self.genre_id = genre_id
    

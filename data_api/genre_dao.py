@@ -39,5 +39,12 @@ class GenreDao(object):
             genre_obj = GenreDao.add_genre(session, genre_name)
             session.flush()
 
+
+    @staticmethod
+    def clear_movie_genre_map(session, movie_id):
+        
+        
+        session.query(MovieGenre).filter(MovieGenre.movie_id == movie_id).delete()
+
     
 
