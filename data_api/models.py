@@ -65,4 +65,8 @@ class MovieGenre(Base):
 	def __init__(self, movie_id, genre_id):
         self.movie_id = movie_id
         self.genre_id = genre_id
+
+	def __repr__(self):
+        return "Movie Genre Table Id={} Movie ID={}, Genre ID={}".format(
+            self.id, self.movie_id, self.genre_id)
    

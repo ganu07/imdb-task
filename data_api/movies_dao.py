@@ -23,6 +23,13 @@ class MoviesDao(object):
     def get_genre_list(genre_blob):
         return genre_blob.split(MoviesDao.GENRE_MARKER)
 
+    if imdb_score and imdb_score != movie.imdb_score:
+            movie.imdb_score = imdb_score
+
+        if director:
+            director_obj = CastDao.check_or_add_cast(session, director)
+            movie.director_id = director_obj.id
+
 
     @staticmethod
     def add_movie(session, popularity, director, genre_list, imdb_score, name):
@@ -41,8 +48,7 @@ class MoviesDao(object):
 
         if name and name != movie.name:
             movie.name = name
-	if popularity and popularity != movie.popularity:
-            movie.popularity = popularity
+	
 
 
     @staticmethod

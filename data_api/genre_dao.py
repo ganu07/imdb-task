@@ -21,14 +21,6 @@ class GenreDao(object):
         session.add(genre)
         return genre
 
-
-    @staticmethod
-    def attach_movie_to_genre_db(session, movie_id, genre_id):
-        
-        movie_genre = MovieGenre(movie_id, genre_id)
-        session.add(movie_genre)
-        return movie_genre
-
     
      @staticmethod
     def attach_movie_to_genre(session, movie_id, genre_name):

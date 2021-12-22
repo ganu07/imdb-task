@@ -117,6 +117,17 @@ def add_movies():
             raise MissingFields
 
         popularity, director, genre_list, imdb_score, name = Validator.parse_json(data)
+        except (json.decoder.JSONDecodeError, MissingFields):
+        return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
+                             ResponseMaker.RESPONSE_400_ERROR_MISSING_FIELDS).return_response()
+    except InputOutOfBounds:
+        return ResponseMaker(ResponseMaker.RESPONSE_400, ResponseMaker.RESPONSE_400_MESSAGE,
+                             ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS).return_response()
+    except Exception:
+        session.rollback()
+        LOG.exception("Exception occurred while writting movie {} to db".format(name))
+        return ResponseMaker(ResponseMaker.RESPONSE_500).return_response(
+            ResponseMaker.RESPONSE_500_MESSAGE)
 
         # Add a validation for popularity and imdb_score
         

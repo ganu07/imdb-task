@@ -28,9 +28,6 @@ class Validator(object):
             # raise validation error
             raise InputOutOfBounds
 
-        if imdb_score > 10 or imdb_score < 0:
-            # raise validation error
-            raise InputOutOfBounds
 
 	@staticmethod
     def parse_json(movie_json):

@@ -39,3 +39,12 @@ class TestMovies(unittest.TestCase):
         imdb_score = float(movie_json.get('imdb_score', 0))
         name = movie_json.get('name', '').strip()
     
+            # Check response 200 with output Success case
+            response = client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_200, response.status_code)
+
+            # Check response 400 with entry exists
+            response = client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_400, response.status_code)
+            self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_ENTRY_PRESENT,
+                             json.loads(response.get_data(as_text=True)).get('err_code'))

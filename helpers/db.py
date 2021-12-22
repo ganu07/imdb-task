@@ -33,3 +33,13 @@ def load_db():
 
 def enable_foreign_keys(sn):
     sn.execute('PRAGMA foreign_keys = ON')
+
+@contextmanager
+def terminating_sn():
+    # A context manager which closes session and db connections after use
+    sn = session()
+    try:
+        yield sn
+    finally:
+        sn.close()
+        sn.bind.dispose()

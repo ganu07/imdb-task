@@ -7,13 +7,11 @@ from data_api.models import Cast
 
 
 class CastDao(object):
-    """
-    A static Cast dao class to isolate cast related functionality
-    """
+    
     @staticmethod
     def get_cast(session, name):
         
-        return data.query(Cast).filter(Cast.name == name).first()
+        return session.query(Cast).filter(Cast.name == name).first()
 
     @staticmethod
     def add_cast(session, name):
@@ -22,13 +20,13 @@ class CastDao(object):
         session.add(cast_obj)
         return cast_obj
 
-
-
     @staticmethod
     def check_or_add_cast(session, cast_name):
+       
         cast_obj = CastDao.get_cast(session, cast_name)
 
         if not cast_obj:
             cast_obj = CastDao.add_cast(session, cast_name)
             session.flush()
-        cast_obj = CastDao.get_cast(session, cast_name)
+        return cast_obj
+
