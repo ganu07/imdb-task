@@ -2,6 +2,8 @@
 
 The imdb api application starts with basic auth with username = admin and password = admin
 
+use Postman API to send the request : https://web.postman.co/
+
 The api start with this = GET https://flask-imd.herokuapp.com/
 
 1) GET all the search movie with this request 
@@ -13,34 +15,34 @@ The api start with this = GET https://flask-imd.herokuapp.com/
     If you want perticular search movie then use the request like this: 
      GET https://flask-imd.herokuapp.com/v1/movies?name=star
          
- {
-    "total": 2,
-    "data": [
-        {
-            "id": 2,
-            "99popularity": 88.0,
-            "director": "George Lucas",
-            "genre": [
-                "Action",
-                "Adventure",
-                "Fantasy",
-                "Sci-Fi"
-            ],
-            "imdb_score": 8.8,
-            "name": "Star Wars"
-        },
-        {
-            "id": 7,
-            "99popularity": 86.0,
-            "director": "Marc Daniels",
-            "genre": [
-                "Adventure",
-                "Sci-Fi"
-            ],
-            "imdb_score": 8.6,
-            "name": "Star Trek"
-        },
- }
+    {
+       "total": 2,
+       "data": [
+           {
+               "id": 2,
+               "99popularity": 88.0,
+               "director": "George Lucas",
+               "genre": [
+                   "Action",
+                   "Adventure",
+                   "Fantasy",
+                   "Sci-Fi"
+               ],
+               "imdb_score": 8.8,
+               "name": "Star Wars"
+           },
+           {
+               "id": 7,
+               "99popularity": 86.0,
+               "director": "Marc Daniels",
+               "genre": [
+                   "Adventure",
+                   "Sci-Fi"
+               ],
+               "imdb_score": 8.6,
+               "name": "Star Trek"
+           },
+    }
  
  
 2) A POST API for adding new movies accepts json input. ALL Fields Mandatory
