@@ -105,5 +105,16 @@ ef test_002_movies_delete_api(self):
             content = json.loads(response.get_data(as_text=True)).get('data')
             self.assertFalse(content)
 
+	def test_003_movies_get_and_put_api(self):
+        data = TestMovies.test_data.copy()
+
+        with app.test_client() as client:
+            # Adding entry
+            client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+
+            # testing 401
+            response = client.put(self.API_URI, data=json.dumps(data))
+            self.assertEqual(ResponseMaker.RESPONSE_401, response.status_code)
+
 
 

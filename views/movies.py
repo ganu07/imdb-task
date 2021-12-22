@@ -180,3 +180,9 @@ def delete_movies():
 
             return ResponseMaker(ResponseMaker.RESPONSE_200).return_response(
                 ResponseMaker.RESPONSE_200_MESSAGE)
+
+except Exception:
+        session.rollback()
+        LOG.exception("Exception occurred while deleting movie id {} from db".format(movie_id))
+        return ResponseMaker(ResponseMaker.RESPONSE_500).return_response(
+            ResponseMaker.RESPONSE_500_MESSAGE)
