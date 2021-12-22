@@ -11,7 +11,6 @@ def basic_auth(func):
     def inner(*args, **kwargs):
         auth = request.authorization
 	if not auth or not enforce_auth(auth.username, auth.password):
-            return ResponseMaker(ResponseMaker.RESPONSE_401).return_response(
-                ResponseMaker.RESPONSE_401_MESSAGE)
+            pass
 
     return inner

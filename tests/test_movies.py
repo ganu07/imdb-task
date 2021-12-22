@@ -48,3 +48,17 @@ class TestMovies(unittest.TestCase):
             self.assertEqual(ResponseMaker.RESPONSE_400, response.status_code)
             self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_ENTRY_PRESENT,
                              json.loads(response.get_data(as_text=True)).get('err_code'))
+
+	# Check 99popularity and imdb score out of bounds
+            data['99popularity'] = -1
+            response = client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_400, response.status_code)
+            self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS,
+                             json.loads(response.get_data(as_text=True)).get('err_code'))
+
+            data['99popularity'] = 101
+            response = client.post(self.API_URI, data=json.dumps(data), headers=self.headers)
+            self.assertEqual(ResponseMaker.RESPONSE_400, response.status_code)
+            self.assertEqual(ResponseMaker.RESPONSE_400_ERROR_OUT_OF_BOUNDS,
+                             json.loads(response.get_data(as_text=True)).get('err_code'))
+

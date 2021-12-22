@@ -30,6 +30,10 @@ def load_db():
     engine = get_engine()
     Base.metadata.create_all(engine)
 
+def session():
+    # Return sqlalchemy session to database
+    return Session(bind=get_engine(), expire_on_commit=False)
+
 
 def enable_foreign_keys(sn):
     sn.execute('PRAGMA foreign_keys = ON')

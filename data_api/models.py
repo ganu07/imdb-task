@@ -52,15 +52,7 @@ class Genres(Base):
 class MovieGenre(Base):
     __tablename__ = 'movie_genre'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True)
-    movie_id = Column(INTEGER)
-    genre_id = Column(INTEGER)
-
-    __table_args__ = (
-        ForeignKeyConstraint(['movie_id'], ['movies.id'], ondelete='CASCADE' ,
-                             name='movie_id_fx_key'),
-        Index('movie_genre_id_index', 'id')
-    )
+    
 
 	def __init__(self, movie_id, genre_id):
         self.movie_id = movie_id

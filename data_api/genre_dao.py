@@ -18,7 +18,7 @@ class GenreDao(object):
     def add_genre(session, name):
        
         genre = Genres(name)
-        session.add(genre)
+        
         return genre
 
     
